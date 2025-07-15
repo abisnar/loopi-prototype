@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
-import { Smartphone, DollarSign, Shield, Truck, CheckCircle, Upload, Search } from "lucide-react"
+import { Smartphone, DollarSign, Shield, Truck, CheckCircle, Upload, Search, TrendingUp } from "lucide-react"
 
 export default function SellPage() {
   const [step, setStep] = useState(1)
@@ -358,15 +358,65 @@ export default function SellPage() {
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-4">
-                  <div className="p-4 border rounded-lg">
-                    <h5 className="font-medium mb-2">Instant Payout</h5>
-                    <p className="text-2xl font-bold text-purple-600 mb-1">${estimatedPrice}</p>
-                    <p className="text-sm text-gray-600">Get paid within 24 hours of device verification</p>
+                  <div className="p-6 border-2 border-purple-200 rounded-lg hover:border-purple-400 transition-colors cursor-pointer">
+                    <div className="flex items-center mb-4">
+                      <div className="w-12 h-12 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center mr-3">
+                        <DollarSign className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <h5 className="font-bold text-lg">Sell It Now</h5>
+                        <p className="text-sm text-gray-600">Quick & guaranteed sale</p>
+                      </div>
+                    </div>
+                    <p className="text-3xl font-bold text-purple-600 mb-2">${estimatedPrice}</p>
+                    <p className="text-sm text-gray-600 mb-4">
+                      Get paid within 1-3 days after we receive and validate your device
+                    </p>
+                    <ul className="text-sm text-gray-600 space-y-1">
+                      <li>• Guaranteed payment</li>
+                      <li>• Fast processing</li>
+                      <li>• No waiting for buyers</li>
+                      <li>• Immediate price lock</li>
+                    </ul>
                   </div>
-                  <div className="p-4 border rounded-lg">
-                    <h5 className="font-medium mb-2">Consignment</h5>
-                    <p className="text-2xl font-bold text-green-600 mb-1">${estimatedPrice + 50}</p>
-                    <p className="text-sm text-gray-600">Higher payout when your device sells (7-14 days)</p>
+
+                  <div className="p-6 border-2 border-green-200 rounded-lg hover:border-green-400 transition-colors cursor-pointer">
+                    <div className="flex items-center mb-4">
+                      <div className="w-12 h-12 bg-gradient-to-r from-green-600 to-emerald-600 rounded-full flex items-center justify-center mr-3">
+                        <TrendingUp className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <h5 className="font-bold text-lg">Sell on Platform</h5>
+                        <p className="text-sm text-gray-600">Higher price potential</p>
+                      </div>
+                    </div>
+                    <p className="text-3xl font-bold text-green-600 mb-2">${estimatedPrice + 80}</p>
+                    <p className="text-sm text-gray-600 mb-4">
+                      List on our marketplace for maximum value (typically sells in 7-21 days)
+                    </p>
+                    <ul className="text-sm text-gray-600 space-y-1">
+                      <li>• Higher selling price</li>
+                      <li>• Accept buyer offers</li>
+                      <li>• Set minimum price</li>
+                      <li>• Professional listing</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="mt-6">
+                  <h4 className="font-medium mb-4">Platform Listing Options</h4>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Set Your Asking Price</label>
+                      <Input type="number" placeholder={`$${estimatedPrice + 80}`} className="w-full" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Minimum Acceptable Price</label>
+                      <Input type="number" placeholder={`$${estimatedPrice + 40}`} className="w-full" />
+                      <p className="text-sm text-gray-600 mt-1">
+                        Offers below this amount will be automatically rejected
+                      </p>
+                    </div>
                   </div>
                 </div>
 

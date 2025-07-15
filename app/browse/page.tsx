@@ -25,6 +25,7 @@ export default function BrowsePage() {
       batteryHealth: 98,
       price: 899,
       originalPrice: 1199,
+      minimumPrice: 849, // Add this
       image: "/images/iphone-15-pro-natural.png",
       certified: true,
       imeiVerified: true,
@@ -38,6 +39,7 @@ export default function BrowsePage() {
       batteryHealth: 92,
       price: 649,
       originalPrice: 899,
+      minimumPrice: 599, // Add this
       image: "/images/iphone-14-purple.png",
       certified: true,
       imeiVerified: true,
@@ -51,6 +53,7 @@ export default function BrowsePage() {
       batteryHealth: 89,
       price: 749,
       originalPrice: 1099,
+      minimumPrice: 699, // Add this
       image: "/images/iphone-13-pro-max-blue.png",
       certified: true,
       imeiVerified: true,
@@ -64,6 +67,7 @@ export default function BrowsePage() {
       batteryHealth: 85,
       price: 449,
       originalPrice: 699,
+      minimumPrice: 399, // Add this
       image: "/images/iphone-12-black.png",
       certified: true,
       imeiVerified: true,
@@ -77,6 +81,7 @@ export default function BrowsePage() {
       batteryHealth: 96,
       price: 699,
       originalPrice: 899,
+      minimumPrice: 649, // Add this
       image: "/images/iphone-15-pink.png",
       certified: true,
       imeiVerified: true,
@@ -90,6 +95,7 @@ export default function BrowsePage() {
       batteryHealth: 91,
       price: 549,
       originalPrice: 799,
+      minimumPrice: 499, // Add this
       image: "/images/iphone-13-midnight.png",
       certified: true,
       imeiVerified: true,

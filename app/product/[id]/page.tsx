@@ -7,11 +7,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Progress } from "@/components/ui/progress"
-import { Shield, Battery, Smartphone, ArrowLeft, Star, CheckCircle } from "lucide-react"
+import { Shield, Battery, Smartphone, ArrowLeft, Star, CheckCircle, DollarSign } from "lucide-react"
 import Image from "next/image"
+import { MakeOfferModal } from "@/components/make-offer-modal"
 
 export default function ProductPage({ params }: { params: { id: string } }) {
   const [selectedImage, setSelectedImage] = useState(0)
+  const [showOfferModal, setShowOfferModal] = useState(false)
 
   // Mock product data - in real app, fetch based on params.id
   const product = {
@@ -62,6 +64,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
       original_parts: "All original Apple parts",
       battery_cycles: 127,
     },
+    minimumPrice: 849,
   }
 
   return (
@@ -225,10 +228,30 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                 size="lg"
                 variant="outline"
                 className="w-full border-purple-600 text-purple-600 hover:bg-purple-50 bg-transparent"
+                onClick={() => setShowOfferModal(true)}
+              >
+                Make an Offer
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                className="w-full border-gray-300 text-gray-700 hover:bg-gray-50 bg-transparent"
               >
                 Add to Cart
               </Button>
             </div>
+
+            {/* Offer Information */}
+            <Card className="mb-6 bg-blue-50 border-blue-200">
+              <CardContent className="p-4">
+                <div className="flex items-center mb-2">
+                  <DollarSign className="w-5 h-5 text-blue-600 mr-2" />
+                  <span className="font-medium text-blue-800">Make an Offer</span>
+                </div>
+                <p className="text-sm text-blue-700 mb-2">Seller's minimum price: ${product.minimumPrice}</p>
+                <p className="text-xs text-blue-600">Offers below the minimum price will be automatically rejected</p>
+              </CardContent>
+            </Card>
 
             {/* Quick Info */}
             <div className="grid grid-cols-2 gap-4 text-sm">
@@ -364,6 +387,16 @@ export default function ProductPage({ params }: { params: { id: string } }) {
           </Tabs>
         </div>
       </div>
+      <MakeOfferModal
+        isOpen={showOfferModal}
+        onClose={() => setShowOfferModal(false)}
+        product={{
+          model: product.model,
+          price: product.price,
+          minimumPrice: product.minimumPrice,
+          image: product.images[0],
+        }}
+      />
     </div>
   )
 }
