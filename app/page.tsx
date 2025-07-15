@@ -16,7 +16,7 @@ export default function HomePage() {
       batteryHealth: 98,
       price: 899,
       originalPrice: 1199,
-      image: "/placeholder.svg?height=300&width=300",
+      image: "/images/iphone-15-pro-natural.png",
       certified: true,
     },
     {
@@ -28,7 +28,7 @@ export default function HomePage() {
       batteryHealth: 92,
       price: 649,
       originalPrice: 899,
-      image: "/placeholder.svg?height=300&width=300",
+      image: "/images/iphone-14-purple.png",
       certified: true,
     },
     {
@@ -40,7 +40,7 @@ export default function HomePage() {
       batteryHealth: 89,
       price: 749,
       originalPrice: 1099,
-      image: "/placeholder.svg?height=300&width=300",
+      image: "/images/iphone-13-pro-max-blue.png",
       certified: true,
     },
   ]
