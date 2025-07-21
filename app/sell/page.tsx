@@ -15,7 +15,7 @@ export default function SellPage() {
   const [step, setStep] = useState(1)
   const [imeiNumber, setImeiNumber] = useState("")
   const [deviceInfo, setDeviceInfo] = useState(null)
-  const [estimatedPrice, setEstimatedPrice] = useState(0)
+  const [estimatedPrice, setEstimatedPrice] = useState(0) // This is the initial estimated payout
 
   const handleIMEICheck = () => {
     // Mock IMEI validation
@@ -27,10 +27,27 @@ export default function SellPage() {
         carrier: "Unlocked",
         status: "Clean",
       })
-      setEstimatedPrice(850)
+      setEstimatedPrice(850) // Initial estimated payout
       setStep(2)
     }
   }
+
+  // Define mock values for the fair market price calculation
+  const basePrice = 900
+  const conditionAdjustment = -30
+  const batteryHealthBonus = 10
+  const marketDemandBonus = 20
+
+  // Calculate the Fair Market Price
+  const fairMarketPrice = basePrice + conditionAdjustment + batteryHealthBonus + marketDemandBonus
+
+  // Calculate "Sell It Now" price (60% of Fair Market Price)
+  const sellItNowPrice = Math.round(0.6 * fairMarketPrice)
+
+  // Calculate "Sell on Platform" recommended price (Fair Market Price)
+  const sellOnPlatformRecommendedPrice = fairMarketPrice
+  // Calculate a reasonable minimum for "Sell on Platform"
+  const sellOnPlatformMinimumPrice = Math.round(fairMarketPrice * 0.95) // Example: 95% of fair market price
 
   const steps = [
     { number: 1, title: "Device Info", description: "Enter your iPhone details" },
@@ -323,8 +340,8 @@ export default function SellPage() {
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="text-center p-8 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg">
-                  <div className="text-5xl font-bold text-purple-600 mb-2">${estimatedPrice}</div>
-                  <p className="text-gray-600">Estimated payout for your iPhone</p>
+                  <div className="text-5xl font-bold text-purple-600 mb-2">${fairMarketPrice}</div>
+                  <p className="text-gray-600">Fair Market Price for your iPhone</p>
                   <Badge className="mt-2 bg-gradient-to-r from-purple-600 to-pink-600">
                     <Shield className="w-3 h-3 mr-1" />
                     Price Guaranteed for 7 Days
@@ -332,27 +349,27 @@ export default function SellPage() {
                 </div>
 
                 <div className="space-y-4">
-                  <h4 className="font-medium">Quote Breakdown</h4>
+                  <h4 className="font-medium">Quote Breakdown (Fair Market Price)</h4>
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <span>Base Price (iPhone 15 Pro 256GB)</span>
-                      <span>$900</span>
+                      <span>${basePrice}</span>
                     </div>
                     <div className="flex justify-between">
                       <span>Condition Adjustment (Excellent)</span>
-                      <span>-$30</span>
+                      <span>${conditionAdjustment}</span>
                     </div>
                     <div className="flex justify-between">
                       <span>Battery Health (98%)</span>
-                      <span>+$10</span>
+                      <span>+${batteryHealthBonus}</span>
                     </div>
                     <div className="flex justify-between">
                       <span>Market Demand Bonus</span>
-                      <span>+$20</span>
+                      <span>+${marketDemandBonus}</span>
                     </div>
                     <div className="border-t pt-2 flex justify-between font-bold">
-                      <span>Total Payout</span>
-                      <span className="text-purple-600">${estimatedPrice}</span>
+                      <span>Total Payout (Fair Market Price)</span>
+                      <span className="text-purple-600">${fairMarketPrice}</span>
                     </div>
                   </div>
                 </div>
@@ -368,7 +385,7 @@ export default function SellPage() {
                         <p className="text-sm text-gray-600">Quick & guaranteed sale</p>
                       </div>
                     </div>
-                    <p className="text-3xl font-bold text-purple-600 mb-2">${estimatedPrice}</p>
+                    <p className="text-3xl font-bold text-purple-600 mb-2">${sellItNowPrice}</p>
                     <p className="text-sm text-gray-600 mb-4">
                       Get paid within 1-3 days after we receive and validate your device
                     </p>
@@ -390,7 +407,7 @@ export default function SellPage() {
                         <p className="text-sm text-gray-600">Higher price potential</p>
                       </div>
                     </div>
-                    <p className="text-3xl font-bold text-green-600 mb-2">${estimatedPrice + 80}</p>
+                    <p className="text-3xl font-bold text-green-600 mb-2">${sellOnPlatformRecommendedPrice}</p>
                     <p className="text-sm text-gray-600 mb-4">
                       List on our marketplace for maximum value (typically sells in 7-21 days)
                     </p>
@@ -407,12 +424,15 @@ export default function SellPage() {
                   <h4 className="font-medium mb-4">Platform Listing Options</h4>
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium mb-2">Set Your Asking Price</label>
-                      <Input type="number" placeholder={`$${estimatedPrice + 80}`} className="w-full" />
+                      <Label className="block text-sm font-medium mb-2">Set Your Asking Price</Label>
+                      <Input type="number" defaultValue={sellOnPlatformRecommendedPrice} className="w-full" />
+                      <p className="text-sm text-gray-600 mt-1">
+                        Loopi suggests an expected market value based on your device's details.
+                      </p>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-2">Minimum Acceptable Price</label>
-                      <Input type="number" placeholder={`$${estimatedPrice + 40}`} className="w-full" />
+                      <Label className="block text-sm font-medium mb-2">Minimum Acceptable Price</Label>
+                      <Input type="number" defaultValue={sellOnPlatformMinimumPrice} className="w-full" />
                       <p className="text-sm text-gray-600 mt-1">
                         Offers below this amount will be automatically rejected
                       </p>
@@ -447,8 +467,7 @@ export default function SellPage() {
                 <div className="p-4 bg-green-50 rounded-lg">
                   <div className="flex items-center mb-2">
                     <CheckCircle className="w-5 h-5 text-green-600 mr-2" />
-                    <span className="font-medium text-green-800">Quote Accepted: ${estimatedPrice}</span>
-                    <span className="font-medium text-green-800">Quote Accepted: ${estimatedPrice}</span>
+                    <span className="font-medium text-green-800">Quote Accepted: ${fairMarketPrice}</span>
                   </div>
                   <p className="text-sm text-green-600">
                     Your quote is locked in for 7 days. We'll send you a prepaid shipping label.
