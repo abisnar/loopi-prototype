@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react" // Import useEffect
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -15,7 +15,69 @@ export default function SellPage() {
   const [step, setStep] = useState(1)
   const [imeiNumber, setImeiNumber] = useState("")
   const [deviceInfo, setDeviceInfo] = useState(null)
-  const [estimatedPrice, setEstimatedPrice] = useState(0) // This is the initial estimated payout
+  const [selectedCondition, setSelectedCondition] = useState("excellent") // Default condition
+  const [batteryHealthInput, setBatteryHealthInput] = useState("90") // Default battery health
+
+  // States for pricing components
+  const [basePrice, setBasePrice] = useState(900) // Mock base price, could be dynamic based on model/storage
+  const [conditionAdjustment, setConditionAdjustment] = useState(0)
+  const [batteryHealthBonus, setBatteryHealthBonus] = useState(0)
+  const [marketDemandBonus, setMarketDemandBonus] = useState(20) // Mock market demand bonus
+
+  // States for calculated prices
+  const [fairMarketPrice, setFairMarketPrice] = useState(0)
+  const [sellItNowPrice, setSellItNowPrice] = useState(0)
+  const [sellOnPlatformRecommendedPrice, setSellOnPlatformRecommendedPrice] = useState(0)
+  const [sellOnPlatformMinimumPrice, setSellOnPlatformMinimumPrice] = useState(0)
+
+  // Effect to recalculate prices when dependencies change
+  useEffect(() => {
+    let currentConditionAdjustment = 0
+    switch (selectedCondition) {
+      case "perfect":
+        currentConditionAdjustment = 50
+        break
+      case "excellent":
+        currentConditionAdjustment = 0
+        break
+      case "very-good":
+        currentConditionAdjustment = -50
+        break
+      case "good":
+        currentConditionAdjustment = -100
+        break
+      case "fair":
+        currentConditionAdjustment = -200
+        break
+      case "poor":
+        currentConditionAdjustment = -300
+        break
+      default:
+        currentConditionAdjustment = 0
+    }
+    setConditionAdjustment(currentConditionAdjustment)
+
+    let currentBatteryHealthBonus = 0
+    const battery = Number.parseInt(batteryHealthInput)
+    if (!isNaN(battery)) {
+      if (battery >= 95) {
+        currentBatteryHealthBonus = 30
+      } else if (battery >= 90) {
+        currentBatteryHealthBonus = 10
+      } else if (battery >= 85) {
+        currentBatteryHealthBonus = 0
+      } else {
+        currentBatteryHealthBonus = -20
+      }
+    }
+    setBatteryHealthBonus(currentBatteryHealthBonus)
+
+    const newFairMarketPrice = basePrice + currentConditionAdjustment + currentBatteryHealthBonus + marketDemandBonus
+    setFairMarketPrice(newFairMarketPrice)
+    setSellItNowPrice(Math.round(0.6 * newFairMarketPrice))
+    setSellOnPlatformRecommendedPrice(newFairMarketPrice)
+    setSellOnPlatformMinimumPrice(Math.round(newFairMarketPrice * 0.95))
+  }, [selectedCondition, batteryHealthInput, basePrice, marketDemandBonus]) // Dependencies for useEffect
 
   const handleIMEICheck = () => {
     // Mock IMEI validation
@@ -27,27 +89,12 @@ export default function SellPage() {
         carrier: "Unlocked",
         status: "Clean",
       })
-      setEstimatedPrice(850) // Initial estimated payout
+      // Set initial values for condition and battery health for step 2
+      setSelectedCondition("excellent")
+      setBatteryHealthInput("90")
       setStep(2)
     }
   }
-
-  // Define mock values for the fair market price calculation
-  const basePrice = 900
-  const conditionAdjustment = -30
-  const batteryHealthBonus = 10
-  const marketDemandBonus = 20
-
-  // Calculate the Fair Market Price
-  const fairMarketPrice = basePrice + conditionAdjustment + batteryHealthBonus + marketDemandBonus
-
-  // Calculate "Sell It Now" price (60% of Fair Market Price)
-  const sellItNowPrice = Math.round(0.6 * fairMarketPrice)
-
-  // Calculate "Sell on Platform" recommended price (Fair Market Price)
-  const sellOnPlatformRecommendedPrice = fairMarketPrice
-  // Calculate a reasonable minimum for "Sell on Platform"
-  const sellOnPlatformMinimumPrice = Math.round(fairMarketPrice * 0.95) // Example: 95% of fair market price
 
   const steps = [
     { number: 1, title: "Device Info", description: "Enter your iPhone details" },
@@ -265,15 +312,16 @@ export default function SellPage() {
 
                 <div>
                   <Label>Screen Condition</Label>
-                  <Select>
+                  <Select value={selectedCondition} onValueChange={setSelectedCondition}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select screen condition" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="perfect">Perfect - No scratches or cracks</SelectItem>
                       <SelectItem value="excellent">Excellent - Minor micro-scratches</SelectItem>
-                      <SelectItem value="good">Good - Light scratches visible</SelectItem>
-                      <SelectItem value="fair">Fair - Noticeable scratches</SelectItem>
+                      <SelectItem value="very-good">Very Good - Light scratches visible</SelectItem>
+                      <SelectItem value="good">Good - Noticeable scratches</SelectItem>
+                      <SelectItem value="fair">Fair - Significant scratches</SelectItem>
                       <SelectItem value="poor">Poor - Cracks or deep scratches</SelectItem>
                     </SelectContent>
                   </Select>
@@ -297,7 +345,14 @@ export default function SellPage() {
 
                 <div>
                   <Label>Battery Health (%)</Label>
-                  <Input placeholder="Enter battery health percentage" />
+                  <Input
+                    placeholder="Enter battery health percentage"
+                    type="number"
+                    value={batteryHealthInput}
+                    onChange={(e) => setBatteryHealthInput(e.target.value)}
+                    min="0"
+                    max="100"
+                  />
                   <p className="text-sm text-gray-600 mt-1">
                     Find in Settings {">"} Battery {">"} Battery Health & Charging
                   </p>
@@ -356,12 +411,12 @@ export default function SellPage() {
                       <span>${basePrice}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span>Condition Adjustment (Excellent)</span>
-                      <span>${conditionAdjustment}</span>
+                      <span>Condition Adjustment ({selectedCondition})</span>
+                      <span>{conditionAdjustment >= 0 ? `+${conditionAdjustment}` : conditionAdjustment}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span>Battery Health (98%)</span>
-                      <span>+${batteryHealthBonus}</span>
+                      <span>Battery Health ({batteryHealthInput}%)</span>
+                      <span>{batteryHealthBonus >= 0 ? `+${batteryHealthBonus}` : batteryHealthBonus}</span>
                     </div>
                     <div className="flex justify-between">
                       <span>Market Demand Bonus</span>
