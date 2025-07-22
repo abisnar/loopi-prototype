@@ -318,7 +318,7 @@ export default function HowItWorksPage() {
                   <Smartphone className="w-8 h-8 text-gray-600" />
                 </div>
                 <h3 className="text-xl font-bold mb-2">Basic Listing</h3>
-                <div className="text-3xl font-bold text-gray-900 mb-2">Free</div>
+                <div className="text-3xl font-bold text-gray-900 mb-2">0</div>
                 <p className="text-gray-600">Standard inspection and listing</p>
               </div>
               <ul className="space-y-3 mb-6">
@@ -350,7 +350,7 @@ export default function HowItWorksPage() {
                   <Shield className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="text-xl font-bold mb-2">Loopi Certified</h3>
-                <div className="text-3xl font-bold text-purple-600 mb-2">$25</div>
+                <div className="text-3xl font-bold text-purple-600 mb-2">$5</div>
                 <p className="text-gray-600">Enhanced certification and priority listing</p>
               </div>
               <ul className="space-y-3 mb-6">
@@ -383,7 +383,7 @@ export default function HowItWorksPage() {
                   <Shield className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="text-xl font-bold mb-2">Premium Certified</h3>
-                <div className="text-3xl font-bold text-orange-600 mb-2">$50</div>
+                <div className="text-3xl font-bold text-orange-600 mb-2">$15</div>
                 <p className="text-gray-600">Maximum exposure and premium features</p>
               </div>
               <ul className="space-y-3 mb-6">
